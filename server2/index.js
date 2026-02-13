@@ -33,10 +33,22 @@ app.get("/cg", (req, res) => {
   res.status(200).json(cg);
 });
 
-app.get("/cg/students/:gr_number", (req, res) => {
-  const UniversityUID = req.params.gr_number;
+// app.get("/cg/students/:gr_number", (req, res) => {
+//   const UniversityUID = req.params.gr_number;
 
-  const user = cg.find(u => u.UniversityUID === UniversityUID);
+//   const user = cg.find(u => u.UniversityUID === UniversityUID);
+
+//   if (!user) {
+//     return res.status(404).json({ message: "User not found" });
+//   }
+
+//   res.status(200).json(user);
+// });
+
+app.get("/cg/students/:name", (req, res) => {
+  const studentName = req.params.name;
+
+  const user = cg.find(u => u.studentName === studentName);
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
