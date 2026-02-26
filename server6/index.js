@@ -1,27 +1,48 @@
-console.log("okok") ;
+console.log("okookokook")
 
+const express = require("express");
+const mongoose = require("mongoose");
 
-const express = require('express');
-const mongoose = require("mongoose") ;
 const app = express();
+const port = 3000;
 
+app.use(express.json());
 
-app.use(express.json()) ;
-
-
-mongoose.connect("mongodb://localhost:27017/Flipkart")
-.then(()=>console.log("okokkokokokokookokoo"))
-.catch(()=>console.log("colaction is not find"))
-
-const userSchema = new mongoose.Schema({}) ;  // 
-const user = mongoose.model("users" , userSchema) ;
-
+app.get("/", (req, res) => {
+    res.send("Hello");
+});
 
 app.get("/user", async (req, res) => {
-  const data = await user.find({}) ;
+  const data = await User.find({}) ;
   res.send(data);
 });
 
-app.listen(3000, () => {
-  console.log("Server started on port 3000");
+mongoose.connect("mongodb://127.0.0.1:27017/CodingGita")
+    .then(() => console.log("MongoDB is connected"))
+    .catch(err => console.log(err));
+
+
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    age: Number
+});
+
+const User = mongoose.model("User", userSchema);
+
+
+app.post("/user", async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).send("User created successfully");
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+
+
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });
